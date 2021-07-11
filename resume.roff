@@ -1,0 +1,169 @@
+.\" Groff Manual Linked Below
+.\" https://www.gnu.org/software/groff/manual/groff.html
+.\" Helpful info on built-in registers below
+.\" https://www.gnu.org/software/groff/manual/html_node/Built_002din-Registers.html#Built_002din-Registers
+.\" As best as I can tell using \\n[]u with a register that contains a measurement such as 5i
+.\" turns them into usable units as opposed really large numbers that screw up
+.\" the document completely
+.
+.\" Define custom colors
+.defcolor navy rgb #002e8c
+.
+.\" Define custom registers
+.nr PAGE.width 8.25i \" Total width of page
+.nr RESUME.margin 0.2i
+.nr RESUME.gap 0.2i
+.nr LEFT.ll 2i
+.nr RIGHT.po \n[RESUME.margin]+\n[LEFT.ll]+\n[RESUME.gap]
+.nr RIGHT.ll \n[PAGE.width]-\n[RIGHT.po]-\n[RESUME.margin]
+.
+.\" Define custom macros
+.\" Arg 1 is length of line
+.\" \n[.l]u for current line length
+.de LINE
+.	br
+\D'l \\$1 0'
+.	br
+..
+.\" Begin the left side of the document
+.de LEFT
+.	po \\n[RESUME.margin]u
+.	mk TOP \" Mark position vertically
+.	ll \\n[LEFT.ll]u
+..
+.\" Begin the right side of the document
+.de RIGHT
+.	br
+.	po \\n[RIGHT.po]u
+.	rt \" Return to marked position vertically
+.	ll \\n[RIGHT.ll]u
+.	br
+..
+.\" Format: Name Date Language Link
+.de PROJECT
+.	br
+\m[navy]\s+2\\$1\s-2\m[]
+.	br
+Language: \\$2
+.	br
+\\$3 
+.	br
+\\$4
+.	br
+..
+.\" Format: Position Date Company
+.de JOB
+.	br
+\m[navy]\s+2\\$1\s-2\m[]
+.	br
+\\$2 
+.	br
+\\$3
+..
+.\" Bullet point list
+.de BL
+.	br
+\[bu] \\$*
+.	br
+..
+.\" Begin Document
+.LEFT
+.\" Define after .LEFT so we get right line length
+.de LEFT.line
+.	vs 5
+.	LINE \n[.l]u
+.	vs
+..
+.de LEFT.section
+\m[navy]\s+2\\$1\s-2\m[]
+.	LEFT.line
+..
+.nf \" No fill
+.LEFT.section "Personal Information"
+person@example.com
+github.com/Person
+
+.LEFT.section "Programming Languages"
+C
+C++
+Javascript
+Typescript
+POSIX Shell
+Lua
+Python
+
+.LEFT.section Technologies
+Node.js
+NGINX
+certbot
+VirtualBox
+Virt-Manager
+KVM (Linux)
+VMM (OpenBSD)
+
+.LEFT.section "Operating Systems"
+Linux
+OpenBSD, FreeBSD, NetBSD
+Windows/Windows Server
+macOS
+
+.LEFT.section "Build Systems"
+GNU Make
+CMake
+Meson
+
+.LEFT.section "Version Control"
+Git
+CVS
+
+.LEFT.section "Text Processing Languages"
+GNU Troff(Groff)
+neatroff
+LaTeX
+
+.LEFT.section "Office Suites"
+Libre Office
+Microsoft Office
+Google Workspace(GSuite)
+.fi \" Fill again
+.RIGHT
+.\" Define after .RIGHT so we get right line length
+.de RIGHT.section
+.	br
+.	sp 0.5
+.	ps 20
+\m[navy]\\$1\m[]
+.	ps
+.	sp -0.5
+.	LINE \n[.l]u
+..
+.ps 24
+.sp 1
+\m[navy]\fBPerson\fR\m[]
+.br
+.sp 1
+Programmer/Software Engineer
+.ps
+.sp -0.5
+.LINE \n[.l]u
+.sp 0.5
+.br
+.RIGHT.section "Career Objective"
+Enthusiastic, team orientated programmer with advanced knowledge of operating systems.
+Seeking an opportunity to learn and sharpen my programming and problem solving skills in a passionate enviroment.
+Extremely fast learner of new libraries, frameworks, build systems, operating systems and programming languages.
+.RIGHT.section Projects
+.PROJECT "Project Name" C "May 2021 - Current" https://github.com/Person/Project
+This is a really great project with lots of cool features that the hiring department will never look at.
+.br
+.RIGHT.section "Work Experience"
+.JOB "Summer Camp Counselor" "June 2019 - August 2019, June 2020 - August 2020" "GoalieDev"
+.BL Worked cooperatively with other instructors to manage campers aged 7-14
+.BL Other stuff you did
+.br
+.RIGHT.section Education
+.mk
+Really Famous University
+.rj \" Need to call right justify before .rt so text is on the same line
+.rt
+September 2016 - May 2020
